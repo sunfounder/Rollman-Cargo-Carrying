@@ -116,112 +116,112 @@ void loop()
     delay(200);
   }
 #endif
-  /**************************************************************************/
+ /**************************************************************************/     
   Read_IICData();
-  if  (Flag[1] == 1 || Flag[2] == 1 || Flag[3] == 1 || Flag[4] == 1 || Flag[5] == 1 || Flag[6] == 1)
-  {
-    if ( Flag[1] == 0 && Flag[2] == 0 && Flag[5] == 0 && Flag[6] == 0 && (Flag[3] == 1 || Flag[4] == 1))
+    if  (Flag[1] == 1 || Flag[2] == 1 || Flag[3] == 1 || Flag[4] == 1 || Flag[5] == 1 || Flag[6] == 1)
     {
-      motors.drive(100, 100);
+          if ( Flag[1] == 0 && Flag[2] == 0 && Flag[5] == 0 && Flag[6] == 0 && (Flag[3] == 1 || Flag[4] == 1))
+          {
+            motors.drive(100, 100);
+           }
+          
+          else if ((Flag[1] == 1 && Flag[2] == 1 )&&( Flag[3] == 1 && Flag[4] == 1 )&&( Flag[5] == 1 && Flag[6] == 1))
+          {
+              delay(40);
+              for (int i = 100; i > 0; i--)
+              {
+                motors.drive(i, i); delay(4);
+              }
+               Read_IICData();
+              if ((Flag[1] == 0 && Flag[2] == 0 )&&( Flag[3] == 0 &&Flag[4] == 0 )&&( Flag[5] == 0 && Flag[6] == 0))
+                {
+                     turn_right();
+                }
+                else 
+                {
+                     motors.drive(100, 100);
+                }
+           }
+           
+             else
+          {
+                PID();
+          } 
     }
-
-    else if ((Flag[1] == 1 && Flag[2] == 1 ) && ( Flag[3] == 1 && Flag[4] == 1 ) && ( Flag[5] == 1 && Flag[6] == 1))
-    {
-      delay(40);
-      for (int i = 100; i > 0; i--)
-      {
-        motors.drive(i, i); delay(4);
-      }
-      Read_IICData();
-      if ((Flag[1] == 0 && Flag[2] == 0 ) && ( Flag[3] == 0 && Flag[4] == 0 ) && ( Flag[5] == 0 && Flag[6] == 0))
-      {
-        turn_right();
-      }
-      else
-      {
-        motors.drive(100, 100);
-      }
-    }
-
-    else
-    {
-      PID();
-    }
-  }
-
-  /**************************************************************************/
-  else   if ((Flag[0] == 0) && (Flag[1] == 0 ) && (Flag[2] == 0) && (Flag[3] == 0) && (Flag[4] == 0) && (Flag[5] == 0) && (Flag[6] == 0) && (Flag[7] == 0)) //多次判断是否是是全白
-  {
-    for (int i = 80; i > 0; i--)
-    {
-      motors.drive(i, i); delay(2);
-    }
-    Read_IICData();
-    if  ((Flag[0] == 0) && (Flag[1] == 0 ) && (Flag[2] == 0) && (Flag[3] == 0) && (Flag[4] == 0) && (Flag[5] == 0) && (Flag[6] == 0) && (Flag[7] == 0))
+    
+    /**************************************************************************/       
+   else   if ((Flag[0] == 0) && (Flag[1] == 0 )&& (Flag[2] == 0) && (Flag[3] == 0) && (Flag[4] == 0) && (Flag[5] == 0) && (Flag[6] == 0) && (Flag[7] == 0)) //多次判断是否是是全白
     {
       for (int i = 80; i > 0; i--)
       {
         motors.drive(i, i); delay(2);
       }
       Read_IICData();
-      if  ((Flag[0] == 0) && (Flag[1] == 0 ) && (Flag[2] == 0) && (Flag[3] == 0) && (Flag[4] == 0) && (Flag[5] == 0) && (Flag[6] == 0) && (Flag[7] == 0))
+      if  ((Flag[0] == 0) && (Flag[1] == 0 )&& (Flag[2] == 0) && (Flag[3] == 0) && (Flag[4] == 0) && (Flag[5] == 0) && (Flag[6] == 0) && (Flag[7] == 0)) 
       {
-        turn_back();
+                      for (int i = 80; i > 0; i--)
+                      {
+                        motors.drive(i, i); delay(2);
+                      }
+                      Read_IICData();
+           if  ((Flag[0] == 0) && (Flag[1] == 0 )&& (Flag[2] == 0) && (Flag[3] == 0) && (Flag[4] == 0) && (Flag[5] == 0) && (Flag[6] == 0) && (Flag[7] == 0)) 
+                {
+                  turn_back();
+                }
+           else   if ((Flag[1] == 1 || Flag[2] == 1 )&&( Flag[3] == 1 || Flag[4] == 1 )&&( Flag[5] == 1 || Flag[6] == 1))
+                {
+                     motors.drive(0, 0);
+                     frequency++;
+                     if(frequency == 2)
+                     {
+                        Servo_0.attach(A0);
+                        Servo_0.write(100);
+                        delay(1000);
+                        Servo_0.attach(A0);
+                        Servo_0.write(0);
+                        frequency = 0;
+                     }                    
+                     delay(3000);
+                     motors.drive(-100, -100);
+                     delay(200);
+                     turn_back();     
+                 }
+//           else 
+//                {
+//                  motors.drive(100, 100); 
+//                  Read_IICData();
+//                 }
       }
-      else   if ((Flag[1] == 1 || Flag[2] == 1 ) && ( Flag[3] == 1 || Flag[4] == 1 ) && ( Flag[5] == 1 || Flag[6] == 1))
-      {
-        motors.drive(0, 0);
-        frequency++;
-        if (frequency == 2)
-        {
-          Servo_0.attach(A0);
-          Servo_0.write(100);
-          delay(1000);
-          Servo_0.attach(A0);
-          Servo_0.write(0);
-          frequency = 0;
-        }
-        delay(3000);
-        motors.drive(-100, -100);
-        delay(200);
-        turn_back();
-      }
-      //           else
-      //                {
-      //                  motors.drive(100, 100);
-      //                  Read_IICData();
-      //                 }
+      else   if ((Flag[1] == 1 || Flag[2] == 1 )&&( Flag[3] == 1 || Flag[4] == 1 )&&( Flag[5] == 1 || Flag[6] == 1))
+       {
+          motors.drive(0, 0);
+             frequency++;
+         if(frequency == 2)
+         {
+            Servo_0.attach(A0);
+            Servo_0.write(100);
+            delay(1000);
+            Servo_0.attach(A0);
+            Servo_0.write(0);
+            frequency = 0;
+          }
+         delay(3000);
+         motors.drive(-100, -100);
+         delay(200);
+         turn_back();     
+       }
+//      else 
+//      {
+//             motors.drive(100, 100); 
+//             Read_IICData();
+//       }
     }
-    else   if ((Flag[1] == 1 || Flag[2] == 1 ) && ( Flag[3] == 1 || Flag[4] == 1 ) && ( Flag[5] == 1 || Flag[6] == 1))
+ /**************************************************************************/        
+    else if (Flag[1] == 1 && Flag[2] == 1 && Flag[3] == 1 && Flag[4] == 1 && Flag[5] == 1 && Flag[6] == 1)
     {
-      motors.drive(0, 0);
-      frequency++;
-      if (frequency == 2)
-      {
-        Servo_0.attach(A0);
-        Servo_0.write(100);
-        delay(1000);
-        Servo_0.attach(A0);
-        Servo_0.write(0);
-        frequency = 0;
-      }
-      delay(3000);
-      motors.drive(-100, -100);
-      delay(200);
-      turn_back();
-    }
-    //      else
-    //      {
-    //             motors.drive(100, 100);
-    //             Read_IICData();
-    //       }
-  }
-  /**************************************************************************/
-  else if (Flag[1] == 1 && Flag[2] == 1 && Flag[3] == 1 && Flag[4] == 1 && Flag[5] == 1 && Flag[6] == 1)
-  {
-    motors.drive(100, 100);
-  }
-  /**************************************************************************/
+         motors.drive(100, 100); 
+     }
+   /**************************************************************************/        
 }
 
 void Threshold_Check(int ms)
@@ -296,9 +296,9 @@ void turn_right()
   for (int i = 60; i > 0; i--)
   {
     motors.drive(i, -i); delay(2);
-  }
-  //  motors.drive(0, 0);
-  Read_IICData();
+  } 
+//  motors.drive(0, 0);
+   Read_IICData();
 }
 void turn_back()
 {
@@ -319,21 +319,21 @@ void turn_back()
     motors.drive(i, -i); delay(2);
   }
   // motors.drive(0, 0);
-  Read_IICData();
+   Read_IICData();
 }
 void PID()
 {
-  lastError = 0;
-  float error = 0.3 * Flag[1] + 0.2 * Flag[2] + 0.1 * Flag[3] - 0.1 * Flag[4] - 0.2 * Flag[5] - 0.3 * Flag[6];
-  float motorSpeed = Kp * error + Kd * (error - lastError);      //Rollman's PID control
-  lastError = error;
-  speed1 = LEFT_BASE_SPEED - motorSpeed;
-  speed2 = RIGHT_BASE_SPEED + motorSpeed;
-  if (speed2 > RIGHT_MAX_SPEED ) speed2 = RIGHT_MAX_SPEED;  // prevent the motor from going beyond max speed
-  if (speed1 > LEFT_MAX_SPEED ) speed1 = LEFT_MAX_SPEED;    // prevent the motor from going beyond max speed
-  if (speed2 < 0) speed2 = 0;                               // keep the motor speed positive
-  if (speed1 < 0) speed1 = 0;                               // keep the motor speed positive
-  motors.drive(speed1, speed2);
+       lastError = 0;
+      float error = 0.3 * Flag[1] + 0.2 * Flag[2] + 0.1 * Flag[3] - 0.1 * Flag[4] - 0.2 * Flag[5] - 0.3 * Flag[6];
+      float motorSpeed = Kp * error + Kd * (error - lastError);      //Rollman's PID control
+      lastError = error;
+      speed1 = LEFT_BASE_SPEED - motorSpeed;
+      speed2 = RIGHT_BASE_SPEED + motorSpeed;
+      if (speed2 > RIGHT_MAX_SPEED ) speed2 = RIGHT_MAX_SPEED;  // prevent the motor from going beyond max speed
+      if (speed1 > LEFT_MAX_SPEED ) speed1 = LEFT_MAX_SPEED;    // prevent the motor from going beyond max speed
+      if (speed2 < 0) speed2 = 0;                               // keep the motor speed positive
+      if (speed1 < 0) speed1 = 0;                               // keep the motor speed positive
+      motors.drive(speed1, speed2);
 }
 void turn_left()
 {
@@ -354,6 +354,7 @@ void turn_left()
   {
     motors.drive(-i, i); delay(2);
   }
-  Read_IICData();
+   Read_IICData();
 }
+
 
