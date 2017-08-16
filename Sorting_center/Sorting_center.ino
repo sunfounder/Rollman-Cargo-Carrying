@@ -9,9 +9,9 @@ void avoidobstacle()
 {
   digitalWrite(SIG, HIGH);
   delayMicroseconds(11);
-  digitalWrite(SIG, LOW);
-  rxTime = pulseIn(WAV, HIGH);
-  distance = (float)rxTime * 34 / 500.0;
+  digitalWrite(SIG, LOW);                   //给超声波模块触发信号
+  rxTime = pulseIn(WAV, HIGH);              //读取超声波模块检测时间
+  distance = (float)rxTime * 34 / 500.0;   //计算超声波模块检测距离，将数据转化成cm
   distance = distance / 2;
   Serial.print("distance:");
   Serial.println(distance);
